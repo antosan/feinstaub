@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/feinstaub/precache-manifest.f86a2f982da955a78c50b80c234b55f3.js"
+  "/feinstaub/precache-manifest.cb794a065790a0a4f9602b1848c4835e.js"
 );
 
 workbox.clientsClaim();
