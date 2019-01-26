@@ -29,7 +29,7 @@ class App extends React.Component {
   async fetch() {
     try {
       const response = await axios.get(
-        'http://api.airquality.codeforafrica.org/v1/now/'
+        'https://api.airquality.codeforafrica.org/v1/now/'
       );
 
       let results = response.data.map(async data => ({

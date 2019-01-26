@@ -48,3 +48,13 @@ Each sensor has a unique ID. The one at TUK is 93.
      - humidity
 
 Each sensor shows a `latitude` and `longitude` of where it is mounted.
+
+## Deployment
+
+To deploy the app directly to Github Pages, run:
+
+```
+npm run deploy
+```
+
+The site will be available at https://antosan.github.io/feinstaub/
