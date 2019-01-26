@@ -1,13 +1,13 @@
 {
-  "main.css": "/feinstaub/static/css/main.c0ee1a95.chunk.css",
-  "main.js": "/feinstaub/static/js/main.3fa7db6e.chunk.js",
-  "main.js.map": "/feinstaub/static/js/main.3fa7db6e.chunk.js.map",
-  "static/js/1.5048231d.chunk.js": "/feinstaub/static/js/1.5048231d.chunk.js",
-  "static/js/1.5048231d.chunk.js.map": "/feinstaub/static/js/1.5048231d.chunk.js.map",
+  "main.css": "/feinstaub/static/css/main.46cd0acf.chunk.css",
+  "main.js": "/feinstaub/static/js/main.66456fb0.chunk.js",
+  "main.js.map": "/feinstaub/static/js/main.66456fb0.chunk.js.map",
+  "static/js/1.d6bdf5c2.chunk.js": "/feinstaub/static/js/1.d6bdf5c2.chunk.js",
+  "static/js/1.d6bdf5c2.chunk.js.map": "/feinstaub/static/js/1.d6bdf5c2.chunk.js.map",
   "runtime~main.js": "/feinstaub/static/js/runtime~main.bc7b0fa8.js",
   "runtime~main.js.map": "/feinstaub/static/js/runtime~main.bc7b0fa8.js.map",
-  "static/css/main.c0ee1a95.chunk.css.map": "/feinstaub/static/css/main.c0ee1a95.chunk.css.map",
+  "static/css/main.46cd0acf.chunk.css.map": "/feinstaub/static/css/main.46cd0acf.chunk.css.map",
   "index.html": "/feinstaub/index.html",
-  "precache-manifest.deca4e6232d314cb772034998c0e51b8.js": "/feinstaub/precache-manifest.deca4e6232d314cb772034998c0e51b8.js",
+  "precache-manifest.f86a2f982da955a78c50b80c234b55f3.js": "/feinstaub/precache-manifest.f86a2f982da955a78c50b80c234b55f3.js",
   "service-worker.js": "/feinstaub/service-worker.js"
 }
