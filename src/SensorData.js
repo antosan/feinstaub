@@ -1,4 +1,5 @@
 import React from 'react';
+import cx from 'classnames';
 import { format } from 'date-fns';
 
 function SensorData({
@@ -9,7 +10,12 @@ function SensorData({
   sensorDataValues,
 }) {
   return (
-    <div className="flex flex-col bg-white max-w-sm shadow-lg rounded-lg overflow-hidden mb-4 p-5">
+    <div
+      className={cx(
+        'flex flex-col bg-white max-w-sm shadow-lg rounded-lg overflow-hidden mb-4 p-5',
+        { 'border-black border-4': sensorId === 93 }
+      )}
+    >
       <div className="flex flex-row justify-between">
         <span className="text-sm text-grey-dark uppercase">
           <span className="font-bold">{`#${sensorId}`}</span> {sensorType}
