@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
-import { format } from 'date-fns';
+import memoize from 'memoize-async';
+import SensorData from './SensorData';
 import './App.css';
 
 class App extends React.Component {
@@ -74,38 +75,53 @@ class App extends React.Component {
 
   async nominatimGeocoder(latitude, longitude) {
     const NOMINATIM_URL = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&limit=1&lat=${latitude}&lon=${longitude}`;
+    const memFetch = memoize(this.fn);
 
     try {
-      const response = await axios.get(NOMINATIM_URL);
+      const response = await memFetch(NOMINATIM_URL);
 
-      return response.data.display_name;
+      return response ? response.display_name : '';
     } catch (error) {
-      console.error(error);
+      console.error('nominatimGeocoder error -> ', error);
       return '';
     }
+  }
+
+  fn(url) {
+    axios.get(url).then(res => res.data);
   }
 
   render() {
     const { sensorData } = this.state;
 
     return (
-      <div className="container mx-auto">
-        <div>
-          {sensorData.map(data => (
-            <span key={data.id} className="max-w-sm shadow-lg mb-8">
-              {`Sensor ${data.sensorId}: ${format(
-                data.timestamp,
-                'hh:mm a'
-              )} - ${data.location}`}
-              <div className="text-sm text-grey-darker mb-4">
-                {data.sensorDataValues.map(sensordata => (
-                  <span key={sensordata.id} className="block">
-                    {`${sensordata.value_type}: ${sensordata.value}`}
-                  </span>
-                ))}
-              </div>
-            </span>
-          ))}
+      <div className="container mx-auto px-4 py-4">
+        <div className="text-5xl text-center m-4">
+          <span>{sensorData.length}</span>
+          <span className="text-2xl">sensors</span>
+        </div>
+        <div className="flex flex-row flex-wrap justify-between">
+          {sensorData.map(data => {
+            const {
+              id,
+              sensorId,
+              sensorType,
+              location,
+              timestamp,
+              sensorDataValues,
+            } = data;
+
+            return (
+              <SensorData
+                key={id}
+                sensorId={sensorId}
+                sensorType={sensorType}
+                location={location}
+                timestamp={timestamp}
+                sensorDataValues={sensorDataValues}
+              />
+            );
+          })}
         </div>
       </div>
     );
