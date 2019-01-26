@@ -10,7 +10,6 @@ class App extends React.Component {
 
     this.state = {
       sensorData: [],
-      sensorId: 93,
     };
 
     this.fetch = this.fetch.bind(this);
@@ -52,8 +51,8 @@ class App extends React.Component {
           new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
       );
 
-      // Sort results by sensor ID
-      results.sort((a, b) => a.sensorId - b.sensorId);
+      // Sort results by sensor ID - descending order
+      results.sort((a, b) => b.sensorId - a.sensorId);
 
       // Get latest value for each sensor
       const sensorData = [];
