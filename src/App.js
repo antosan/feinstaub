@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import memoize from 'memoize-async';
 import SensorData from './SensorData';
 import './App.css';
 
@@ -10,6 +9,7 @@ class App extends React.Component {
 
     this.state = {
       sensorData: [],
+      sensorLocations: {},
     };
 
     this.fetch = this.fetch.bind(this);
@@ -30,20 +30,7 @@ class App extends React.Component {
       const response = await axios.get(
         'https://api.airquality.codeforafrica.org/v1/now/'
       );
-
-      let results = response.data.map(async data => ({
-        id: data.id,
-        sensorId: data.sensor.id,
-        sensorType: data.sensor.sensor_type.name,
-        location: await this.nominatimGeocoder(
-          data.location.latitude,
-          data.location.longitude
-        ),
-        timestamp: data.timestamp,
-        sensorDataValues: data.sensordatavalues,
-      }));
-
-      results = await Promise.all(results);
+      const results = response.data;
 
       // sort results by timestamp - descending (newer results first)
       results.sort(
@@ -52,18 +39,47 @@ class App extends React.Component {
       );
 
       // Sort results by sensor ID - descending order
-      results.sort((a, b) => b.sensorId - a.sensorId);
+      results.sort((a, b) => b.sensor.id - a.sensor.id);
 
       // Get latest value for each sensor
-      const sensorData = [];
+      const filteredResults = [];
       const sensorIds = [];
 
       results.forEach(res => {
-        if (!sensorIds.includes(res.sensorId)) {
-          sensorData.push(res);
-          sensorIds.push(res.sensorId);
+        if (!sensorIds.includes(res.sensor.id)) {
+          filteredResults.push(res);
+          sensorIds.push(res.sensor.id);
         }
       });
+
+      let sensorData = filteredResults.map(async data => {
+        const latLon =
+          String(data.location.latitude) + String(data.location.longitude);
+        const { sensorLocations } = this.state;
+        let location;
+
+        if (sensorLocations[latLon]) {
+          location = sensorLocations[latLon];
+        } else {
+          location = await this.nominatimGeocoder(
+            data.location.latitude,
+            data.location.longitude
+          );
+          sensorLocations[latLon] = location;
+          this.setState({ sensorLocations });
+        }
+
+        return {
+          id: data.id,
+          sensorId: data.sensor.id,
+          sensorType: data.sensor.sensor_type.name,
+          location,
+          timestamp: data.timestamp,
+          sensorDataValues: data.sensordatavalues,
+        };
+      });
+
+      sensorData = await Promise.all(sensorData);
 
       this.setState({ sensorData });
     } catch (error) {
@@ -74,20 +90,15 @@ class App extends React.Component {
 
   async nominatimGeocoder(latitude, longitude) {
     const NOMINATIM_URL = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&limit=1&lat=${latitude}&lon=${longitude}`;
-    const memFetch = memoize(this.fn);
 
     try {
-      const response = await memFetch(NOMINATIM_URL);
+      const response = await axios.get(NOMINATIM_URL);
 
-      return response ? response.display_name : '';
+      return response.data.display_name;
     } catch (error) {
       console.error('nominatimGeocoder error -> ', error);
       return '';
     }
-  }
-
-  fn(url) {
-    axios.get(url).then(res => res.data);
   }
 
   render() {
